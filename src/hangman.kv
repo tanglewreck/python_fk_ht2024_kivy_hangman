@@ -1,0 +1,96 @@
+#:kivy 2.0.3
+# hangman.kv
+#
+
+<StatusLabel@Label>
+    font_name: 'Roboto'
+    font_size: '14sp'
+    color: 0, 0, 0, 1
+    size_hint_y: None
+    height: 40
+    background: 0, 0, 0, 1
+
+
+# The class HangmanGame inherits Widget
+<HangmanGame>
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 0.1
+    padding: 100
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 0.5
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 0.5
+            Line:
+                points: self.x, self.y, self.width, self.y, self.width, self.height, self.x, self.height, self.x, self.y
+                width: 20
+            #Rectangle:
+            #    pos: root.pos
+            #    size: root.size
+
+        orientation: 'vertical'
+        padding: 50
+        spacing: 10
+        size_hint: (None, None)
+        height: root.height - 10
+        width: root.width - 10
+    
+        StatusLabel:
+        # Label:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 1, 1, 1, 1
+            id: status_line_1
+            text: "Antal gissningar kvar: " 
+            # text: "Antal gissningar kvar " + str(root.number_guesses)
+            font_name: 'Roboto'
+            font_size: '14sp'
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: 40
+            background: 0, 0, 0, 1
+
+        StatusLabel:
+        # Label:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 1, 1, 1, 1
+            id: status_line_2
+            text: "Gissade bokstäver: " + root.guesses
+            font_name: 'Roboto'
+            font_size: '14sp'
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: 40
+            background: 0, 0, 0, 1
+
+            
+#
+        TextInput:
+#            #canvas:
+#            #    Color:
+#            #        rgba: 1, 1, 1, 0.85
+#            #    Rectangle:
+#            #        pos: self.pos
+#            #        size: self.size
+            font_name: 'Roboto'
+            font_size: '18sp'
+            size_hint_y: None
+            height: '40sp'
+            multiline: False
+            # on_text_validate: root.number_guesses -= 1
+            on_text_validate: root.update_status_line()
+#    
