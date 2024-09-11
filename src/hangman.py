@@ -21,8 +21,12 @@ Technical stuff:
 
 # Read local kivy config
 import os
+os.environ['KIVY_HOME'] = f"{os.environ['PWD']}/.kivy"
 import kivy.config
 kivy.config.Config.read(f"{os.environ['PWD']}/.kivy/config.ini")
+kivy.config.Config.set('kivy', 'exit_on_escape', 1)
+kivy.config.Config.set('kivy', 'log_enable', 1)
+kivy.config.Config.write()
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -30,6 +34,7 @@ from kivy.properties import NumericProperty
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 
@@ -47,19 +52,25 @@ class HangmanGame(Widget):
     def __init__(self, *args, **kwargs):
         """Constructor. Calls __init__() of Widget."""
         super().__init__()
+        #popup = Popup(title="Hej men nej",
+        #              content=Label(text="Hej fubar"),
+        #              size_hint=(None, None),
+        #              size=(300, 300),
+        #              background="0, 0, 0, 1")
+        #popup.open()
 
     def update_gallows(self):
         """Update the gallows graphics"""
         pass
 
-    def update_status_line(self):
+    def update_status_line(self, text):
         """Update the status line:
         - previously guessed characters (all incorrect)
         - number of guesses left
         - the (partially) revealed secret word
         """
         self.number_guesses -= 1
-        self.guesses += "x"
+        self.guesses += text
 
 
 class HangmanApp(App):

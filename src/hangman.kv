@@ -42,8 +42,8 @@
         height: root.height - 10
         width: root.width - 10
     
-        StatusLabel:
-        # Label:
+        # StatusLabel:
+        Label:
             canvas.before:
                 Rectangle:
                     pos: self.pos
@@ -51,8 +51,8 @@
                 Color:
                     rgba: 1, 1, 1, 1
             id: status_line_1
-            text: "Antal gissningar kvar: " 
-            # text: "Antal gissningar kvar " + str(root.number_guesses)
+            # text: "Antal gissningar kvar: " 
+            text: "Antal gissningar kvar " + str(root.number_guesses)
             font_name: 'Roboto'
             font_size: '14sp'
             color: 0, 0, 0, 1
@@ -60,8 +60,8 @@
             height: 40
             background: 0, 0, 0, 1
 
-        StatusLabel:
-        # Label:
+        # StatusLabel:
+        Label:
             canvas.before:
                 Rectangle:
                     pos: self.pos
@@ -91,6 +91,14 @@
             size_hint_y: None
             height: '40sp'
             multiline: False
+            border: (1, 1, 1, 10)
+            cursor_blink: False
+            cursor_color: [1, 1, 1, 1]
+            cursor_width: 4
+            hint_text: "Skriv in en bokstav"
+            # text: "foo bar"
+            focus: True
             # on_text_validate: root.number_guesses -= 1
-            on_text_validate: root.update_status_line()
+            on_text_validate: root.update_status_line(self.text)
+            # on_text_validate: root.update_status_line()
 #    
