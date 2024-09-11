@@ -49,12 +49,14 @@
         width: root.width - 10
     
         StatusLabel:
-            id: fubar
-            text: ""
-
-        StatusLabel:
             id: partially_hidden
             text: root.partially_hidden
+            font_size: '24sp'
+
+        StatusLabel:
+            id: secret_word
+            text: root.secret_word + " " + str(root.secret_word_len)
+            # text: root.sword
 
         StatusLabel:
             id: status_line_1
@@ -68,6 +70,7 @@
             
         TextInput:
             id: text_input
+            halign: 'center'
             border: (1, 1, 1, 10)
             cursor_blink: False
             cursor_color: [1, 1, 1, 1]
@@ -78,8 +81,13 @@
             height: '40sp'
             hint_text: "Skriv in en bokstav"
             multiline: False
+            on_focus: self.focus = True
             on_text_validate: root.update_status_line(self.text)
             # on_text_validate: root.number_guesses -= 1
             # on_text_validate: root.on_enter(self.text)
             size_hint_y: None
+
+        Button:
+            text: "Avsluta"
+            on_press: raise SystemExit(0)
 #    

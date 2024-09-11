@@ -19,10 +19,12 @@ Technical stuff:
 
 """
 
-import os
+import random
+
 # Set KIVY_HOME environment variable. This is where
 # the kivy configuration is (supposed to be) read and 
 # where log files are (supposed to be) stored.
+import os
 os.environ['KIVY_HOME'] = f"{os.environ['PWD']}/.kivy"
 # Read local kivy config
 import kivy.config
@@ -37,6 +39,7 @@ from kivy.properties import NumericProperty
 from kivy.properties import StringProperty
 from kivy.properties import ListProperty
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
@@ -52,10 +55,20 @@ Window.set_title("Hangman")
 class HangmanGame(Widget):
 # class HangmanGame(BoxLayout):
     """Hangman game root widget"""
+    secret_word_str = random.choice(WORDLIST)
+    secret_word_len_int = len(secret_word_str)
+    secret_word_len = NumericProperty(secret_word_len_int)
+    secret_word = StringProperty(secret_word_str)
+    partially_hidden_str = "_ " * secret_word_len_int
+    partially_hidden = StringProperty(partially_hidden_str)
+    s = str(secret_word)
+    print("len(secret_word) =", len(s))
+    print(str(secret_word_str))
+    print(secret_word_str)
+
     number_guesses = NumericProperty(10)
     guesses = StringProperty("")
     guesses_list = ListProperty()
-    partially_hidden = StringProperty("_ _ _ _ _ _ _")
 
     def __init__(self, *args, **kwargs):
         """Constructor. Calls __init__() of Widget."""
@@ -66,6 +79,7 @@ class HangmanGame(Widget):
         #              size=(300, 300),
         #              background="0, 0, 0, 1")
         #popup.open()
+        self.sword = random.choice(WORDLIST)
 
     def update_gallows(self):
         """Update the gallows graphics"""
