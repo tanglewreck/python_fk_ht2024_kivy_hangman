@@ -50,7 +50,7 @@
     
         StatusLabel:
             id: partially_hidden
-            text: root.partially_hidden
+            text: " ".join(root.partially_hidden_list)
             font_size: '24sp'
 
         StatusLabel:
@@ -90,4 +90,9 @@
         Button:
             text: "Avsluta"
             on_press: raise SystemExit(0)
+            size_hint: (None, None)
+            height: '24sp'
+            width: root.width / 4
+            center_x: root.center_x
+            halign: 'center'
 #    

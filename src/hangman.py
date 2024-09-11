@@ -59,8 +59,11 @@ class HangmanGame(Widget):
     secret_word_len_int = len(secret_word_str)
     secret_word_len = NumericProperty(secret_word_len_int)
     secret_word = StringProperty(secret_word_str)
-    partially_hidden_str = "_ " * secret_word_len_int
+    
+    partially_hidden_str = "_" * secret_word_len_int
     partially_hidden = StringProperty(partially_hidden_str)
+    partially_hidden_list = ListProperty(list(partially_hidden_str))
+
     s = str(secret_word)
     print("len(secret_word) =", len(s))
     print(str(secret_word_str))
@@ -92,7 +95,13 @@ class HangmanGame(Widget):
         - the (partially) revealed secret word
         """
         def update_partially_hidden(text):
-            pass
+            for k, c in enumerate(self.secret_word):
+                if text == c:
+                    self.partially_hidden_list[k] = text
+            s = " ".join(self.partially_hidden_list)
+            print(s)
+            l = [s[k] for k in range(len(s))]
+            print(l)
 
         # Decrease number of remaining guesses 
         self.number_guesses -= 1
@@ -100,7 +109,7 @@ class HangmanGame(Widget):
         if not text in self.guesses:
             self.guesses += text[0]
             self.guesses_list.append(text[0])
-            print(self.guesses_list)
+            update_partially_hidden(text)
         self.ids.text_input.text = ""
         self.ids.text_input.focus = True
 
