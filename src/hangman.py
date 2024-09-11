@@ -19,9 +19,12 @@ Technical stuff:
 
 """
 
-# Read local kivy config
 import os
+# Set KIVY_HOME environment variable. This is where
+# the kivy configuration is (supposed to be) read and 
+# where log files are (supposed to be) stored.
 os.environ['KIVY_HOME'] = f"{os.environ['PWD']}/.kivy"
+# Read local kivy config
 import kivy.config
 kivy.config.Config.read(f"{os.environ['PWD']}/.kivy/config.ini")
 kivy.config.Config.set('kivy', 'exit_on_escape', 1)
@@ -32,11 +35,14 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.properties import NumericProperty
 from kivy.properties import StringProperty
+from kivy.properties import ListProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
+
+from wordlists.wordlist_se import WORDLIST
 
 NO_GUESSES = 10
 
@@ -47,7 +53,9 @@ class HangmanGame(Widget):
 # class HangmanGame(BoxLayout):
     """Hangman game root widget"""
     number_guesses = NumericProperty(10)
-    guesses = StringProperty("abc")
+    guesses = StringProperty("")
+    guesses_list = ListProperty()
+    partially_hidden = StringProperty("_ _ _ _ _ _ _")
 
     def __init__(self, *args, **kwargs):
         """Constructor. Calls __init__() of Widget."""
@@ -69,9 +77,25 @@ class HangmanGame(Widget):
         - number of guesses left
         - the (partially) revealed secret word
         """
-        self.number_guesses -= 1
-        self.guesses += text
+        def update_partially_hidden(text):
+            pass
 
+        # Decrease number of remaining guesses 
+        self.number_guesses -= 1
+        # If not already guessed, add to guesses
+        if not text in self.guesses:
+            self.guesses += text[0]
+            self.guesses_list.append(text[0])
+            print(self.guesses_list)
+        self.ids.text_input.text = ""
+        self.ids.text_input.focus = True
+
+    #def on_enter(instance, value):
+    #    print(instance)
+    #    print(instance.ids.text_input.text)
+    #    print(str(instance.number_guesses))
+    #    print(value)
+    #    instance.guesses += value
 
 class HangmanApp(App):
     """The Hangman app"""

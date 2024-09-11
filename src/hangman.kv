@@ -3,6 +3,12 @@
 #
 
 <StatusLabel@Label>
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 1, 1, 1, 1
     font_name: 'Roboto'
     font_size: '14sp'
     color: 0, 0, 0, 1
@@ -42,63 +48,38 @@
         height: root.height - 10
         width: root.width - 10
     
-        # StatusLabel:
-        Label:
-            canvas.before:
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-                Color:
-                    rgba: 1, 1, 1, 1
-            id: status_line_1
-            # text: "Antal gissningar kvar: " 
-            text: "Antal gissningar kvar " + str(root.number_guesses)
-            font_name: 'Roboto'
-            font_size: '14sp'
-            color: 0, 0, 0, 1
-            size_hint_y: None
-            height: 40
-            background: 0, 0, 0, 1
+        StatusLabel:
+            id: fubar
+            text: ""
 
-        # StatusLabel:
-        Label:
-            canvas.before:
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-                Color:
-                    rgba: 1, 1, 1, 1
+        StatusLabel:
+            id: partially_hidden
+            text: root.partially_hidden
+
+        StatusLabel:
+            id: status_line_1
+            text: "Antal gissningar kvar " + str(root.number_guesses)
+
+        StatusLabel:
             id: status_line_2
-            text: "Gissade bokstäver: " + root.guesses
-            font_name: 'Roboto'
-            font_size: '14sp'
-            color: 0, 0, 0, 1
-            size_hint_y: None
-            height: 40
-            background: 0, 0, 0, 1
+            text: "Gissade bokstäver: " + " ".join(root.guesses_list)
+            # text: "Gissade bokstäver: " + root.guesses
 
             
-#
         TextInput:
-#            #canvas:
-#            #    Color:
-#            #        rgba: 1, 1, 1, 0.85
-#            #    Rectangle:
-#            #        pos: self.pos
-#            #        size: self.size
-            font_name: 'Roboto'
-            font_size: '18sp'
-            size_hint_y: None
-            height: '40sp'
-            multiline: False
+            id: text_input
             border: (1, 1, 1, 10)
             cursor_blink: False
             cursor_color: [1, 1, 1, 1]
             cursor_width: 4
-            hint_text: "Skriv in en bokstav"
-            # text: "foo bar"
             focus: True
-            # on_text_validate: root.number_guesses -= 1
+            font_name: 'Roboto'
+            font_size: '18sp'
+            height: '40sp'
+            hint_text: "Skriv in en bokstav"
+            multiline: False
             on_text_validate: root.update_status_line(self.text)
-            # on_text_validate: root.update_status_line()
+            # on_text_validate: root.number_guesses -= 1
+            # on_text_validate: root.on_enter(self.text)
+            size_hint_y: None
 #    
