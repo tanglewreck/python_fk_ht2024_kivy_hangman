@@ -1,6 +1,6 @@
 #:kivy 2.0.3
+
 # hangman.kv
-#
 
 <StatusLabel@Label>
     canvas.before:
@@ -13,7 +13,7 @@
     font_size: '14sp'
     color: 0, 0, 0, 1
     size_hint_y: None
-    height: 40
+    height: 60
     background: 0, 0, 0, 1
 
 
@@ -52,6 +52,7 @@
             id: partially_hidden
             text: " ".join(root.partially_hidden_list)
             font_size: '24sp'
+            height: 180
 
         StatusLabel:
             id: secret_word
@@ -64,13 +65,12 @@
 
         StatusLabel:
             id: status_line_2
-            text: "Gissade bokstäver: " + " ".join(root.guesses_list)
+            text: "Gissade bokstäver: " + " ".join(sorted(root.guesses))
             # text: "Gissade bokstäver: " + root.guesses
 
             
         TextInput:
             id: text_input
-            halign: 'center'
             border: (1, 1, 1, 10)
             cursor_blink: False
             cursor_color: [1, 1, 1, 1]
@@ -78,14 +78,16 @@
             focus: True
             font_name: 'Roboto'
             font_size: '18sp'
+            halign: 'center'
             height: '40sp'
             hint_text: "Skriv in en bokstav"
             multiline: False
             on_focus: self.focus = True
-            on_text_validate: root.update_status_line(self.text)
+            on_text_validate: root.update_status_lines(self.text[0].lower())
             # on_text_validate: root.number_guesses -= 1
             # on_text_validate: root.on_enter(self.text)
             size_hint_y: None
+            valign: 'bottom'
 
         Button:
             text: "Avsluta"

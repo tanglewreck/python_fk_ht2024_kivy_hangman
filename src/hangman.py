@@ -55,70 +55,90 @@ Window.set_title("Hangman")
 class HangmanGame(Widget):
 # class HangmanGame(BoxLayout):
     """Hangman game root widget"""
+
+    # Generate a secret word 
     secret_word_str = random.choice(WORDLIST)
     secret_word_len_int = len(secret_word_str)
-    secret_word_len = NumericProperty(secret_word_len_int)
+    secret_word_len = NumericProperty(len(secret_word_str))
     secret_word = StringProperty(secret_word_str)
     
+    # The partially hidden string is stored as a ListProperty
+    # so that it can be accessed in the kv file
     partially_hidden_str = "_" * secret_word_len_int
-    partially_hidden = StringProperty(partially_hidden_str)
     partially_hidden_list = ListProperty(list(partially_hidden_str))
 
-    s = str(secret_word)
-    print("len(secret_word) =", len(s))
-    print(str(secret_word_str))
-    print(secret_word_str)
-
+    # The number of guesses made is stored as a NumericPropery,
+    # also so that it can be used in the kv file
     number_guesses = NumericProperty(10)
-    guesses = StringProperty("")
-    guesses_list = ListProperty()
+
+    # Guessed characters are stored as a ListProperty
+    guesses = ListProperty()
 
     def __init__(self, *args, **kwargs):
         """Constructor. Calls __init__() of Widget."""
         super().__init__()
-        #popup = Popup(title="Hej men nej",
-        #              content=Label(text="Hej fubar"),
+
+        # NB: The Popup widget below was supposed to
+        # be used to print a welcome screen containing
+        # the rules of the game. Couldn't get it 
+        # working, though, so for now it's commented out.
+        #popup = Popup(title="Regler",
+        #              content=Label(text="""Regler: 
+        #                            Spelet går ut på att gissa ett ord.  
+        #                            Man har tio (10) gissningar på sig.  """, 
+        #              color=(1, 1, 1, 1)),
         #              size_hint=(None, None),
         #              size=(300, 300),
-        #              background="0, 0, 0, 1")
+        #              background="0, 0, 0, 1",
+        #              opacity=1)
         #popup.open()
-        self.sword = random.choice(WORDLIST)
+
+        # Keep track of number of correctly guessed characters
+        self.number_correct_guesses = 0
 
     def update_gallows(self):
         """Update the gallows graphics"""
         pass
 
-    def update_status_line(self, text):
-        """Update the status line:
+    def update_status_lines(self, char):
+        """Update the status lines:
         - previously guessed characters (all incorrect)
         - number of guesses left
         - the (partially) revealed secret word
         """
-        def update_partially_hidden(text):
+        def check_game_won():
+            if self.number_correct_guesses == self.secret_word_len:
+                print("Hurra!")
+                self.ids.text_input.hint_text = "Hurra, du vann!"
+
+        def check_game_over():
+            if self.number_guesses == 0:
+                self.ids.text_input.hint_text = "Game over!"
+
+        def update_partially_hidden(char):
+            """Iterate through the secret word and if the guessed 
+            character matches, update the partially hidden string.
+            Also update the number of correctly made guesses."""
             for k, c in enumerate(self.secret_word):
-                if text == c:
-                    self.partially_hidden_list[k] = text
-            s = " ".join(self.partially_hidden_list)
-            print(s)
-            l = [s[k] for k in range(len(s))]
-            print(l)
+                if char == c:
+                    self.partially_hidden_list[k] = char
+                    self.number_correct_guesses += 1
 
-        # Decrease number of remaining guesses 
-        self.number_guesses -= 1
-        # If not already guessed, add to guesses
-        if not text in self.guesses:
-            self.guesses += text[0]
-            self.guesses_list.append(text[0])
-            update_partially_hidden(text)
+        # If not already guessed, add to guesses, decrease number of
+        # remaining guesses, and update the StatusLabels
+        if not char in self.guesses:
+            self.number_guesses -= 1
+            self.guesses.append(char)
+            update_partially_hidden(char)
+
+        # Check if the game is won or lost.
+        check_game_won()
+        check_game_over()
+
+        # Reset (clear) the TextInput widget
         self.ids.text_input.text = ""
+        # Return focus to the TextInput widget
         self.ids.text_input.focus = True
-
-    #def on_enter(instance, value):
-    #    print(instance)
-    #    print(instance.ids.text_input.text)
-    #    print(str(instance.number_guesses))
-    #    print(value)
-    #    instance.guesses += value
 
 class HangmanApp(App):
     """The Hangman app"""
