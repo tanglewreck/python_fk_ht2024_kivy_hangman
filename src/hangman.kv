@@ -3,6 +3,12 @@
 # hangman.kv
 
 <StatusLabel@Label>
+#    canvas:
+#        Rectangle:
+#            pos: self.pos
+#            size: self.size
+#        Color:
+#            rgba: 1, 1, 1, 1
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -33,7 +39,8 @@
     BoxLayout:
         canvas:
             Color:
-                rgba: 0, 0, 0, 0.5
+                # rgba: 0, 0, 0, 0.5
+                rgba: 1, 1, 1, 0.5
             Line:
                 points: self.x, self.y, self.width, self.y, self.width, self.height, self.x, self.height, self.x, self.y
                 width: 20
@@ -42,6 +49,7 @@
             #    size: root.size
 
         orientation: 'vertical'
+        halign: 'center'
         padding: 50
         spacing: 10
         size_hint: (None, None)
@@ -56,7 +64,8 @@
 
         StatusLabel:
             id: secret_word
-            text: root.secret_word + " " + str(root.secret_word_len)
+            text: ""
+            # text: root.secret_word + " " + str(root.secret_word_len)
             # text: root.sword
 
         StatusLabel:
@@ -91,7 +100,9 @@
 
         Button:
             text: "Avsluta"
-            on_press: raise SystemExit(0)
+            # on_press: raise SystemExit(0)
+            # on_release: raise SystemExit(0)
+            on_release: root.o_quit()
             size_hint: (None, None)
             height: '24sp'
             width: root.width / 4

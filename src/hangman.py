@@ -20,6 +20,8 @@ Technical stuff:
 """
 
 import random
+import sys
+import time
 
 # Set KIVY_HOME environment variable. This is where
 # the kivy configuration is (supposed to be) read and 
@@ -27,11 +29,11 @@ import random
 import os
 os.environ['KIVY_HOME'] = f"{os.environ['PWD']}/.kivy"
 # Read local kivy config
-import kivy.config
-kivy.config.Config.read(f"{os.environ['PWD']}/.kivy/config.ini")
-kivy.config.Config.set('kivy', 'exit_on_escape', 1)
-kivy.config.Config.set('kivy', 'log_enable', 1)
-kivy.config.Config.write()
+# import kivy.config
+# kivy.config.Config.read(f"{os.environ['PWD']}/.kivy/config.ini")
+# kivy.config.Config.set('kivy', 'exit_on_escape', 1)
+# kivy.config.Config.set('kivy', 'log_enable', 1)
+# kivy.config.Config.write()
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -44,6 +46,7 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
+from kivy.clock import Clock
 
 from wordlists.wordlist_se import WORDLIST
 
@@ -73,6 +76,10 @@ class HangmanGame(Widget):
 
     # Guessed characters are stored as a ListProperty
     guesses = ListProperty()
+
+    def do_quit(self, value=None):
+        print("Bye bye!", file=sys.stderr)
+        raise SystemExit(0)
 
     def __init__(self, *args, **kwargs):
         """Constructor. Calls __init__() of Widget."""
@@ -110,10 +117,12 @@ class HangmanGame(Widget):
             if self.number_correct_guesses == self.secret_word_len:
                 print("Hurra!")
                 self.ids.text_input.hint_text = "Hurra, du vann!"
+                Clock.schedule_once(self.do_quit, 5)
 
         def check_game_over():
             if self.number_guesses == 0:
-                self.ids.text_input.hint_text = "Game over!"
+                self.ids.text_input.hint_text = "Game over! " + f"Ordet var {self.secret_word}."
+                Clock.schedule_once(self.do_quit, 5)
 
         def update_partially_hidden(char):
             """Iterate through the secret word and if the guessed 
